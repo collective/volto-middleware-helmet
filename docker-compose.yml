@@ -1,0 +1,7 @@
+services:
+  ci:
+    image: plone/volto-addon-ci
+    volumes:
+      - ./:/opt/frontend/my-volto-project/src/addons/volto-middleware-helmet
+    environment:
+      - GIT_NAME=volto-middleware-helmet
