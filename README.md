@@ -4,7 +4,7 @@
 
 ## Features
 
-Helmet
+[Helmet](https://helmetjs.github.io/) middleware
 
 Demo GIF
 
