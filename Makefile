@@ -1,7 +1,7 @@
 SHELL=/bin/bash
 
 DIR=$(shell basename $$(pwd))
-ADDON ?= "@eeacms/volto-addon-template"
+ADDON ?= "volto-middleware-helmet"
 
 # We like colors
 # From: https://coderwall.com/p/izxssa/colored-makefile-for-golang-projects
@@ -37,12 +37,12 @@ start-backend-docker:		## Starts a Docker-based backend
 .PHONY: test
 test:
 	docker pull plone/volto-addon-ci
-	docker run -it --rm -e NAMESPACE="@eeacms" -e GIT_NAME="${DIR}" -e RAZZLE_JEST_CONFIG=jest-addon.config.js -v "$$(pwd):/opt/frontend/my-volto-project/src/addons/${DIR}" plone/volto-addon-ci yarn test --watchAll=false
+	docker run -it --rm -e GIT_NAME="${DIR}" -e RAZZLE_JEST_CONFIG=jest-addon.config.js -v "$$(pwd):/opt/frontend/my-volto-project/src/addons/${DIR}" plone/volto-addon-ci yarn test --watchAll=false
 
 .PHONY: test-update
 test-update:
 	docker pull plone/volto-addon-ci
-	docker run -it --rm -e NAMESPACE="@eeacms" -e GIT_NAME="${DIR}" -e RAZZLE_JEST_CONFIG=jest-addon.config.js -v "$$(pwd):/opt/frontend/my-volto-project/src/addons/${DIR}" plone/volto-addon-ci yarn test --watchAll=false -u
+	docker run -it --rm -e GIT_NAME="${DIR}" -e RAZZLE_JEST_CONFIG=jest-addon.config.js -v "$$(pwd):/opt/frontend/my-volto-project/src/addons/${DIR}" plone/volto-addon-ci yarn test --watchAll=false -u
 
 .PHONY: help
 help:		## Show this help.

@@ -1,20 +1,21 @@
 {
   "name": "volto-middleware-helmet",
   "version": "0.1.0",
-  "description": "@eeacms/volto-addon-template: Volto add-on",
+  "description": "volto-middleware-helmet: Volto add-on for add security with HTTP headers ",
   "main": "src/index.js",
-  "author": "European Environment Agency: IDM2 A-Team",
+  "author": "Mauro Amico",
   "license": "MIT",
   "homepage": "https://github.com/collective/volto-middleware-helmet",
   "keywords": [
     "volto-addon",
     "volto",
     "plone",
+    "security",
     "react"
   ],
   "repository": {
     "type": "git",
-    "url": "git@github.com:eea/volto-addon-template.git"
+    "url": "git@github.com:collective/volto-middleware-helmet.git"
   },
   "dependencies": {
     "@plone/scripts": "*",

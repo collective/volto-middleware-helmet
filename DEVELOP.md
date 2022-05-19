@@ -10,16 +10,16 @@ Before starting make sure your development environment is properly set. See [Vol
 
 1.  Create new volto app
 
-        yo @plone/volto my-volto-project --addon @eeacms/volto-addon-template --skip-install
+        yo @plone/volto my-volto-project --addon volto-middleware-helmet --skip-install
         cd my-volto-project
 
 1.  Add the following to `mrs.developer.json`:
 
         {
             "volto-addon-template": {
-                "url": "https://github.com/eea/volto-addon-template.git",
-                "package": "@eeacms/volto-addon-template",
-                "branch": "develop",
+                "url": "https://github.com/collective/volto-middleware-helmet.git",
+                "package": "volto-middleware-helmet",
+                "branch": "main",
                 "path": "src"
             }
         }
