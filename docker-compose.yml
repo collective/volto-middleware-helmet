@@ -1,7 +1,10 @@
 services:
   ci:
-    image: plone/volto-addon-ci
-    volumes:
-      - ./:/opt/frontend/my-volto-project/src/addons/volto-middleware-helmet
+    # image: plone/volto-addon-ci
+    build:
+      context: .
+      dockerfile: ci.Dockerfile
+    # volumes:
+    #   - ./:/opt/frontend/my-volto-project/src/addons/volto-middleware-helmet
     environment:
       - GIT_NAME=volto-middleware-helmet
