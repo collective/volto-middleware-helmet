@@ -4,7 +4,11 @@
 
 ## Features
 
-[Helmet](https://helmetjs.github.io/) middleware
+
+
+Improve Volto security with 
+
+<a href="https://helmetjs.github.io/"><img src="https://helmetjs.github.io/resources/logo.svg" width="40" alt="HELMET">Helmet Middleware</a>
 
 Demo GIF
 
