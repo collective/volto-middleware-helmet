@@ -7,6 +7,7 @@ const profiles = {
       directives: {
         // TODO: need improvements
         scriptSrc: ["'self'", 'https:', "'unsafe-inline'"],
+	imgSrc: ["data:", "*.ytimg.com", "*.youtube.com"],
       },
     },
   },
