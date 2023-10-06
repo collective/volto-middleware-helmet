@@ -67,7 +67,7 @@ const applyConfig = (config) => {
   // enable helmet middleware only when server side rendering is executed
   if (__SERVER__) {
     const settings = helmetSpecifiedProfiles[helmetSettings] || helmetSettings;
-    const middleware = helmet(helmetSpecifiedProfiles.default);
+    const middleware = helmet(helmetSpecifiedProfiles[settings]);
     middleware.id = "helmet-middleware";
     config.settings.expressMiddleware.push(middleware);
   }
