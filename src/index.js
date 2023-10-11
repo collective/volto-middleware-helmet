@@ -1,22 +1,55 @@
-import helmet from 'helmet';
+import helmet from "helmet";
 
-// TODO: relaxed profile for dev ?
-const profiles = {
+const helmetModels = {
+  none: false,
+  light: {
+    'default-src': ["http:", "https:", "'unsafe-inline'"],
+    'script-src': ["*", "'unsafe-inline'", "'unsafe-eval'", "'unsafe-hashes'"],
+    'style-src': ["*", "http:", "https:", "'unsafe-inline'", "'unsafe-hashes'"],
+    'img-src': ["*", "data:", "blob:", "http:", "https:"],
+  },
+  // TODO: check the hash of the volto scripts, remove the unsafe-inline and unsafe-hashes from the CSP
+  medium: { //WARNING: the default page will not load correctly with this setting (script coming from other source)
+    'default-src': ["'self'"],
+    'script-src': ["'self'", "'unsafe-inline'", "'unsafe-hashes'"],
+    'style-src': ["'self'", "'unsafe-inline'", "'unsafe-hashes'"],
+    'img-src': ["'self'", 'data:', 'blob:'],
+    'connect-src': ["'self'"],
+    'frame-src': ["'self'"],
+    'base-uri': ["'self'"],
+    'form-action': ["'self'"],
+    'frame-ancestors': ["'none'"],
+    'manifest-src': ["'self'"],
+    'worker-src': ["'self'"],
+  },
+  strict: { //WARNING: the default page will not load correctly with this setting
+    'default-src': ["'self'"],
+    'script-src': ["'self'"],
+    'style-src': ["'self'"],
+    'img-src': ["'self'"],
+    'connect-src': ["'self'"],
+    'frame-src': ["'self'"],
+    'base-uri': ["'self'"],
+    'form-action': ["'self'"],
+    'frame-ancestors': ["'none'"],
+    'manifest-src': ["'self'"],
+    'worker-src': ["'self'"],
+  }
+}
+
+// Apply the helmet settings based on the environment and the profile chosen
+const helmetSpecifiedProfiles = {
   default: {
     contentSecurityPolicy: {
-      directives: {
-        // TODO: need improvements
-        scriptSrc: ["'self'", 'https:', "'unsafe-inline'"],
-	imgSrc: ["data:", "*.ytimg.com", "*.youtube.com"],
-      },
+      directives: helmetModels.light,
     },
+    crossOriginResourcePolicy: false,
+    crossOriginOpenerPolicy: false,
+    crossOriginEmbedderPolicy: false,
   },
   development: {
     hsts: false,
-    contentSecurityPolicy: {
-      scriptSrc: ["'self'", 'https:', "'unsafe-inline'"],
-      reportOnly: true,
-    },
+    contentSecurityPolicy: helmetModels.none,
     crossOriginResourcePolicy: false,
     crossOriginOpenerPolicy: false,
     crossOriginEmbedderPolicy: false,
@@ -24,30 +57,21 @@ const profiles = {
 };
 
 const applyConfig = (config) => {
-  const defaults = {
-    helmetSettings: process.env.HELMET_PROFILE
-      ? process.env.HELMET_PROFILE
-      : __DEVELOPMENT__
-      ? 'development'
-      : 'default',
-  };
+  const helmetSettings = process.env.HELMET_PROFILE || (__DEVELOPMENT__ ? "development" : "default");
+
   config.settings = {
     ...config.settings,
-    ...defaults,
+    helmetSettings,
   };
-  if (__SERVER__) {
-    const settings =
-      profiles[config.settings?.helmetSettings] === undefined
-        ? config.settings?.helmetSettings
-        : profiles[config.settings?.helmetSettings];
-    const middleware = helmet(settings);
-    middleware.id = 'helmet-middleware';
 
-    config.settings.expressMiddleware = [
-      ...config.settings.expressMiddleware,
-      middleware,
-    ];
+  // enable helmet middleware only when server side rendering is executed
+  if (__SERVER__) {
+    const settings = helmetSpecifiedProfiles[helmetSettings] || helmetSettings;
+    const middleware = helmet(helmetSpecifiedProfiles[settings]);
+    middleware.id = "helmet-middleware";
+    config.settings.expressMiddleware.push(middleware);
   }
+
   return config;
 };
 
