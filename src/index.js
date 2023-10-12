@@ -1,4 +1,5 @@
 import helmet from 'helmet';
+const crypto = require("crypto");
 
 const helmetModelsCSP = {
   none: false,
@@ -65,9 +66,15 @@ const helmetSpecifiedProfiles = {
           "'self'",
           "'unsafe-inline'",
           "'unsafe-hashes'",
-          // (req, res) => {
-          //   return "'nonce-1234'";
-          // },
+          "'strict-dynamic'",
+          (req, res) => {
+            res.locals.nonce = crypto.randomBytes(16).toString('hex');
+            // cryptoRandomString({
+            //   length: 32,
+            //   type: 'base64',
+            // });
+            return `'nonce-${res.locals.nonce}'`;
+          },
           'localhost:3001',
         ],
       },
