@@ -43,5 +43,17 @@
     "i18n": "rm -rf build/messages && NODE_ENV=production i18n --addon",
     "cypress:run": "if [ -d ./project ]; then NODE_ENV=development ./project/node_modules/cypress/bin/cypress run; else NODE_ENV=development ../../../node_modules/cypress/bin/cypress run; fi",
     "cypress:open": "if [ -d ./project ]; then NODE_ENV=development ./project/node_modules/cypress/bin/cypress open; else NODE_ENV=development ../../../node_modules/cypress/bin/cypress open; fi"
+  },
+  "prettier": {
+    "trailingComma": "all",
+    "singleQuote": true,
+    "overrides": [
+      {
+        "files": "*.overrides",
+        "options": {
+          "parser": "less"
+        }
+      }
+    ]
   }
 }

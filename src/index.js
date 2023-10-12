@@ -1,15 +1,16 @@
-import helmet from "helmet";
+import helmet from 'helmet';
 
 const helmetModels = {
   none: false,
   light: {
-    'default-src': ["http:", "https:", "'unsafe-inline'"],
-    'script-src': ["*", "'unsafe-inline'", "'unsafe-eval'", "'unsafe-hashes'"],
-    'style-src': ["*", "http:", "https:", "'unsafe-inline'", "'unsafe-hashes'"],
-    'img-src': ["*", "data:", "blob:", "http:", "https:"],
+    'default-src': ['http:', 'https:', "'unsafe-inline'"],
+    'script-src': ['*', "'unsafe-inline'", "'unsafe-eval'", "'unsafe-hashes'"],
+    'style-src': ['*', 'http:', 'https:', "'unsafe-inline'", "'unsafe-hashes'"],
+    'img-src': ['*', 'data:', 'blob:', 'http:', 'https:'],
   },
   // TODO: check the hash of the volto scripts, remove the unsafe-inline and unsafe-hashes from the CSP
-  medium: { //WARNING: the default page will not load correctly with this setting (script coming from other source)
+  medium: {
+    //WARNING: the default page will not load correctly with this setting (script coming from other source)
     'default-src': ["'self'"],
     'script-src': ["'self'", "'unsafe-inline'", "'unsafe-hashes'"],
     'style-src': ["'self'", "'unsafe-inline'", "'unsafe-hashes'"],
@@ -22,7 +23,8 @@ const helmetModels = {
     'manifest-src': ["'self'"],
     'worker-src': ["'self'"],
   },
-  strict: { //WARNING: the default page will not load correctly with this setting
+  strict: {
+    //WARNING: the default page will not load correctly with this setting
     'default-src': ["'self'"],
     'script-src': ["'self'"],
     'style-src': ["'self'"],
@@ -34,8 +36,8 @@ const helmetModels = {
     'frame-ancestors': ["'none'"],
     'manifest-src': ["'self'"],
     'worker-src': ["'self'"],
-  }
-}
+  },
+};
 
 // Apply the helmet settings based on the environment and the profile chosen
 const helmetSpecifiedProfiles = {
@@ -57,7 +59,8 @@ const helmetSpecifiedProfiles = {
 };
 
 const applyConfig = (config) => {
-  const helmetSettings = process.env.HELMET_PROFILE || (__DEVELOPMENT__ ? "development" : "default");
+  const helmetSettings =
+    process.env.HELMET_PROFILE || (__DEVELOPMENT__ ? 'development' : 'default');
 
   config.settings = {
     ...config.settings,
@@ -68,7 +71,7 @@ const applyConfig = (config) => {
   if (__SERVER__) {
     const settings = helmetSpecifiedProfiles[helmetSettings] || helmetSettings;
     const middleware = helmet(helmetSpecifiedProfiles[settings]);
-    middleware.id = "helmet-middleware";
+    middleware.id = 'helmet-middleware';
     config.settings.expressMiddleware.push(middleware);
   }
 
