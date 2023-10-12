@@ -1,12 +1,13 @@
 import helmet from 'helmet';
 
-const helmetModels = {
+const helmetModelsCSP = {
   none: false,
   light: {
     'default-src': ['http:', 'https:', "'unsafe-inline'"],
     'script-src': ['*', "'unsafe-inline'", "'unsafe-eval'", "'unsafe-hashes'"],
     'style-src': ['*', 'http:', 'https:', "'unsafe-inline'", "'unsafe-hashes'"],
     'img-src': ['*', 'data:', 'blob:', 'http:', 'https:'],
+    'font-src': ['*', 'data:', 'http:', 'https:'],
   },
   // TODO: check the hash of the volto scripts, remove the unsafe-inline and unsafe-hashes from the CSP
   medium: {
@@ -22,6 +23,7 @@ const helmetModels = {
     'frame-ancestors': ["'none'"],
     'manifest-src': ["'self'"],
     'worker-src': ["'self'"],
+    'font-src': ["'self'", 'data:'],
   },
   strict: {
     //WARNING: the default page will not load correctly with this setting
@@ -36,6 +38,7 @@ const helmetModels = {
     'frame-ancestors': ["'none'"],
     'manifest-src': ["'self'"],
     'worker-src': ["'self'"],
+    'font-src': ["'self'"],
   },
 };
 
@@ -43,7 +46,7 @@ const helmetModels = {
 const helmetSpecifiedProfiles = {
   default: {
     contentSecurityPolicy: {
-      directives: helmetModels.light,
+      directives: helmetModelsCSP.light,
     },
     crossOriginResourcePolicy: false,
     crossOriginOpenerPolicy: false,
@@ -51,7 +54,25 @@ const helmetSpecifiedProfiles = {
   },
   development: {
     hsts: false,
-    contentSecurityPolicy: helmetModels.none,
+    contentSecurityPolicy: {
+      directives: {
+        ...helmetModelsCSP.medium,
+        'default-src': ["'self'", 'ws:', 'localhost:3001'],
+        'connect-src': ["'self'", 'ws:', 'localhost:3001'],
+        'font-src': ["'self'", 'localhost:3001', 'data:'],
+        'img-src': ["'self'", 'data:', 'blob:', 'localhost:3001'],
+        'script-src': [
+          "'self'",
+          "'unsafe-inline'",
+          "'unsafe-hashes'",
+          // (req, res) => {
+          //   return "'nonce-1234'";
+          // },
+          'localhost:3001',
+        ],
+      },
+      reportOnly: true,
+    },
     crossOriginResourcePolicy: false,
     crossOriginOpenerPolicy: false,
     crossOriginEmbedderPolicy: false,
@@ -70,7 +91,7 @@ const applyConfig = (config) => {
   // enable helmet middleware only when server side rendering is executed
   if (__SERVER__) {
     const settings = helmetSpecifiedProfiles[helmetSettings] || helmetSettings;
-    const middleware = helmet(helmetSpecifiedProfiles[settings]);
+    const middleware = helmet(settings);
     middleware.id = 'helmet-middleware';
     config.settings.expressMiddleware.push(middleware);
   }

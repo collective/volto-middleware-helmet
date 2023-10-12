@@ -46,6 +46,10 @@ Before starting make sure your development environment is properly set. See [Vol
 
 1.  Go to http://localhost:3000
 
+1. Start volto with inspect chrome debugger
+
+        node_modules/.bin/razzle start --inspect
+        
 1.  Happy hacking!
 
         cd src/addons/volto-addon-template/
